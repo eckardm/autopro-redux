@@ -1,0 +1,6 @@
+<p>
+<form style="display:inline" action="http://deepblue.lib.umich.edu/handle/2027.42/XXXXXX/browse?">
+<input type="submit" value="View all items in this collection"/>
+</form>
+</p>
+<br />
