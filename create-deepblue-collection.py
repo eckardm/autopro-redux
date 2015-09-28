@@ -1,4 +1,4 @@
-from 
+from notpasswords import *
 
 # selenium is used automate web browser interaction, you'll need to install it
 import selenium
