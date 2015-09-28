@@ -72,17 +72,16 @@ driver.find_element_by_link_text('Create Collection').click()
 driver.find_element_by_id('aspect_administrative_collection_CreateCollectionForm_field_name').send_keys(name_text)
 
 # introductory text
-driver.find_element_by_id('aspect_administrative_collection_CreateCollectionForm_field_introductory_text').send_keys(name_text)
+driver.find_element_by_id('aspect_administrative_collection_CreateCollectionForm_field_introductory_text').send_keys(introductory_text)
 
 # copyright
-driver.find_element_by_id('aspect_administrative_collection_CreateCollectionForm_field_copyright_text').send_keys(name_text)
+driver.find_element_by_id('aspect_administrative_collection_CreateCollectionForm_field_copyright_text').send_keys(copyright)
 
 # license
-driver.find_element_by_id('aspect_administrative_collection_CreateCollectionForm_field_license').send_keys(name_text)
+driver.find_element_by_id('aspect_administrative_collection_CreateCollectionForm_field_license').send_keys(license)
 
 # create
 driver.find_element_by_id('aspect_administrative_collection_CreateCollectionForm_field_submit_save').click()
-
 
 # assign roles
 
@@ -93,3 +92,4 @@ known issues'''
 # anything where there is raw input needs to be debugged
 # more than one record group or manuscript collection
 # copyright won't always be transferred
+# web archives
