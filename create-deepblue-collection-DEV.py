@@ -60,13 +60,14 @@ uniqname = raw_input('Depositor: ')
 driver = webdriver.Firefox()
 
 # login
-driver.get('https://weblogin.umich.edu/?factors=UMICH.EDU&cosign-deepblue.lib&http://deepblue.lib.umich.edu/webiso-login')
+driver.get('http://' + dev_login_id + ':' + dev_password + '@' + 'dev.deepblue.lib.umich.edu:8080/')
+driver.get('https://weblogin-test.itcs.umich.edu/?factors=UMICH.EDU&cosign-dev.deepblue.lib&http://dev.deepblue.lib.umich.edu:8080/webiso-login')
 driver.find_element_by_id('login').send_keys(login_id)
 driver.find_element_by_id('password').send_keys(password)
 driver.find_element_by_id('loginSubmit').click()
 
 # go to archival collections
-driver.get('http://deepblue.lib.umich.edu/handle/2027.42/65133')
+driver.get('http://dev.deepblue.lib.umich.edu:8080/handle/TEMP-BOGUS/173963')
 
 # create collection
 driver.find_element_by_link_text('Create Collection').click()
