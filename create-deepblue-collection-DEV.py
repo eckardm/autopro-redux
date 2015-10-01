@@ -5,6 +5,7 @@ from notpasswords import *
 
 # selenium is used automate web browser interaction, you'll need to install it
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 
 '''
 gather some information about the collection'''
@@ -119,7 +120,7 @@ driver.find_element_by_id('aspect_administrative_group_EditGroupForm_field_submi
 # put handle in introductory text
 # get handle
 driver.find_element_by_id('aspect_administrative_collection_AssignCollectionRoles_field_submit_return').click()
-handle = driver.find_element(By.XPATH, '//span[text()="test 5"]/parent::a').get_attribute('href').split('/')[5]
+handle = driver.find_element(By.XPATH, '//span[text()="' + name_text + '"]/parent::a').get_attribute('href').split('/')[5]
 
 # add it to introductory text
 driver.find_element_by_link_text(name_text).click()
