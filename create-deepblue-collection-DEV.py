@@ -1,8 +1,13 @@
+'''
+first, import what we need'''
+
 from notpasswords import *
 
 # selenium is used automate web browser interaction, you'll need to install it
 from selenium import webdriver
 
+'''
+gather some information about the collection'''
 
 # name
 name_text = raw_input('Name: ')
@@ -28,7 +33,7 @@ if record_group_or_manuscript_collection_input == 'yes':
         eadid_text = raw_input('EAD ID: ')
         record_group_text = open('record-group.txt', 'r').read().replace('XXXXX', eadid_text).replace('XXXX', name_text).repalce('record groupt / ', '')
 
-# division of reference and access services
+        # division of reference and access services
 division_of_reference_and_access_services_text = open('division-of-reference-and-access-services.txt', 'r').read()
 
 # abstract
@@ -43,18 +48,21 @@ if history_or_biography_input == 'history':
 elif history_or_biography_input == 'biography':
     history_or_biography_text = '<p><b>Biography:</b><br />' + history_or_biography_text_input + '</p>'
 
+# final[ish] product
 introductory_text = view_all_items_in_this_collection_text + bentley_historical_library_banner_text + h2_text + record_group_text + division_of_reference_and_access_services_text + abstract_text + history_or_biography_text
 
 # copyright
 copyright_text = open('copyright.txt', 'r').read()
 
-# liscense
-liscense_text = 'As the designated coordinator for this Deep Blue Collection, I am authorized by the Community members to serve as their representative in all dealings with the Repository. As the designee, I ensure that I have read the Deep Blue policies. Furthermore, I have conveyed to the community the terms and conditions outlined in those policies, including the language of the standard deposit license quoted below and that the community members have granted me the authority to deposit content on their behalf.'
+# license
+license_text = 'As the designated coordinator for this Deep Blue Collection, I am authorized by the Community members to serve as their representative in all dealings with the Repository. As the designee, I ensure that I have read the Deep Blue policies. Furthermore, I have conveyed to the community the terms and conditions outlined in those policies, including the language of the standard deposit license quoted below and that the community members have granted me the authority to deposit content on their behalf.'
 
-
-# create deep blue collection
 # depositor uniqname
 uniqname = raw_input('Depositor: ')
+
+
+'''
+create deep blue collection'''
 
 # setup web driver
 driver = webdriver.Firefox()
@@ -66,37 +74,37 @@ driver.find_element_by_id('login').send_keys(login_id)
 driver.find_element_by_id('password').send_keys(password)
 driver.find_element_by_id('loginSubmit').click()
 
-# go to archival collections
-driver.get('http://dev.deepblue.lib.umich.edu:8080/handle/TEMP-BOGUS/173963')
+# go to bogus collection
+driver.get('http://dev.deepblue.lib.umich.edu:8080/handle/TEMP-BOGUS/235581')
 
 # create collection
 driver.find_element_by_link_text('Create Collection').click()
 
+# fill out form
 # name
 driver.find_element_by_id('aspect_administrative_collection_CreateCollectionForm_field_name').send_keys(name_text)
 
-# introductory text
-driver.find_element_by_id('aspect_administrative_collection_CreateCollectionForm_field_introductory_text').send_keys(introductory_text)
-
 # copyright
-driver.find_element_by_id('aspect_administrative_collection_CreateCollectionForm_field_copyright_text').send_keys(copyright)
+driver.find_element_by_id('aspect_administrative_collection_CreateCollectionForm_field_copyright_text').send_keys(copyright_text)
 
 # license
-driver.find_element_by_id('aspect_administrative_collection_CreateCollectionForm_field_license').send_keys(license)
+driver.find_element_by_id('aspect_administrative_collection_CreateCollectionForm_field_license').send_keys(license_text)
 
 # create
-# driver.find_element_by_id('aspect_administrative_collection_CreateCollectionForm_field_submit_save').click()
+driver.find_element_by_id('aspect_administrative_collection_CreateCollectionForm_field_submit_save').click()
 
+# roles
 # administrators
 driver.find_element_by_id('aspect_administrative_collection_AssignCollectionRoles_field_submit_create_admin').click()
 # mike
 driver.find_element_by_id('aspect_administrative_group_EditGroupForm_field_query').send_keys('shallcro')
 driver.find_element_by_id('aspect_administrative_group_EditGroupForm_field_submit_search_epeople').click()
-driver.find_element_by_xpath("//table[@id='aspect_administrative_group_EditGroupForm_table_group-edit-members-table']//input[@type='Submit']")
+driver.find_element_by_id('aspect_administrative_group_EditGroupForm_field_submit_add_eperson_366').click()
 # max
-driver.find_element_by_id('aspect_administrative_group_EditGroupForm_field_query').send_keys('eckard')
+driver.find_element_by_id('aspect_administrative_group_EditGroupForm_field_query').clear()
+driver.find_element_by_id('aspect_administrative_group_EditGroupForm_field_query').send_keys('eckardm')
 driver.find_element_by_id('aspect_administrative_group_EditGroupForm_field_submit_search_epeople').click()
-driver.find_element_by_xpath("//table[@id='aspect_administrative_group_EditGroupForm_table_group-edit-members-table']//input[@type='Submit']")
+driver.find_element_by_id('aspect_administrative_group_EditGroupForm_field_submit_add_eperson_4864').click()
 # save
 driver.find_element_by_id('aspect_administrative_group_EditGroupForm_field_submit_save').click()
 
@@ -104,21 +112,31 @@ driver.find_element_by_id('aspect_administrative_group_EditGroupForm_field_submi
 driver.find_element_by_id('aspect_administrative_collection_AssignCollectionRoles_field_submit_create_submit').click()
 driver.find_element_by_id('aspect_administrative_group_EditGroupForm_field_query').send_keys(uniqname)
 driver.find_element_by_id('aspect_administrative_group_EditGroupForm_field_submit_search_epeople').click()
-driver.find_element_by_xpath("//table[@id='aspect_administrative_group_EditGroupForm_table_group-edit-members-table']//input[@type='Submit']")
+driver.find_element_by_id('aspect_administrative_group_EditGroupForm_field_submit_add_eperson_' + driver.find_element_by_css_selector('td.ds-table-cell.odd').text).click()
 # save
 driver.find_element_by_id('aspect_administrative_group_EditGroupForm_field_submit_save').click()
 
-# go back and add handle
+# put handle in introductory text
+# get handle
 driver.find_element_by_id('aspect_administrative_collection_AssignCollectionRoles_field_submit_return').click()
-handle = driver.find_element_by_xpath("//ul[@id='aspect_artifactbrowser_CollectionViewer_list_collection-browse']/ul/li[0]/a[@href]").replace('/handle/2027.42/', '').replace('/browse?type=author', '')
-print handle
-# if that's correct, add it to introductory text
+handle = driver.find_element(By.XPATH, '//span[text()="test 5"]/parent::a').get_attribute('href').split('/')[5]
+
+# add it to introductory text
+driver.find_element_by_link_text(name_text).click()
+driver.find_element_by_link_text('Edit Collection').click()
+driver.find_element_by_id('aspect_administrative_collection_EditCollectionMetadataForm_field_introductory_text').send_keys(introductory_text.replace('XXXXXX', handle))
+driver.find_element_by_id('aspect_administrative_collection_EditCollectionMetadataForm_field_submit_save').click()
+
+# that's it, we're done!
+driver.close()
 
 
 '''
 known issues'''
+
 # anything where there is raw input needs to be debugged
 # more than one record group or manuscript collection
+# more than one paragraph
 # copyright won't always be transferred
 # web archives
 # more than one depositor
